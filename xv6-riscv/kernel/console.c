@@ -45,7 +45,7 @@ struct {
   struct spinlock lock;
   
   // input
-#define INPUT_BUF_SIZE 128
+#define INPUT_BUF_SIZE 512
   char buf[INPUT_BUF_SIZE];
   uint r;  // Read index
   uint w;  // Write index
