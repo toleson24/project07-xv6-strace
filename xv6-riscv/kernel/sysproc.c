@@ -10,7 +10,12 @@ uint64
 sys_exit(void)
 {
   int n;
+  struct proc *mp = myproc();
   argint(0, &n);
+
+  if (mp->trace)
+    printf("[%d] exit(&d)\n", mp->pid, n);
+
   exit(n);
   return 0;  // not reached
 }
@@ -18,6 +23,11 @@ sys_exit(void)
 uint64
 sys_getpid(void)
 {
+  struct proc *mp = myproc();
+
+  if (mp->trace)
+    printf("[%d] getpid(&d)\n", mp->pid, n);
+
   return myproc()->pid;
 }
 
