@@ -12,10 +12,8 @@ sys_exit(void)
   int n;
   struct proc *mp = myproc();
   argint(0, &n);
-
   if (mp->trace)
-    printf("[%d] exit(&d)\n", mp->pid, n);
-
+    printf("[%d] exit(%d)\n", mp->pid, n);
   exit(n);
   return 0;  // not reached
 }
@@ -24,10 +22,8 @@ uint64
 sys_getpid(void)
 {
   struct proc *mp = myproc();
-
   if (mp->trace)
-    printf("[%d] getpid(&d)\n", mp->pid, n);
-
+    printf("[%d] getpid(&d)\n", mp->pid);
   return myproc()->pid;
 }
 
@@ -99,3 +95,13 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// uint64
+// sys_strace(void)
+// {
+//   int n;
+//   if (argint(0, &n) < 0)
+//     return -1;
+//   myproc()->trace = n;
+//   return 0;
+// }
