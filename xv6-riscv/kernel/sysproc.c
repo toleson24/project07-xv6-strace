@@ -23,7 +23,7 @@ sys_getpid(void)
 {
   struct proc *mp = myproc();
   if (mp->trace)
-    printf("[%d] getpid(&d)\n", mp->pid);
+    printf("[%d] getpid()\n", mp->pid);
   return myproc()->pid;
 }
 
