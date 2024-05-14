@@ -30,6 +30,9 @@ sys_getpid(void)
 uint64
 sys_fork(void)
 {
+  struct proc *mp = myproc();
+  if (mp->trace)
+    printf("[%d] fork()\n", mp->pid);
   return fork();
 }
 
@@ -38,6 +41,9 @@ sys_wait(void)
 {
   uint64 p;
   argaddr(0, &p);
+  struct proc *mp = myproc();
+  if(mp->trace)
+    printf("[%d] wait(%d)\n", mp->pid, p);
   return wait(p);
 }
 
@@ -96,12 +102,11 @@ sys_uptime(void)
   return xticks;
 }
 
-// uint64
-// sys_strace(void)
-// {
-//   int n;
-//   if (argint(0, &n) < 0)
-//     return -1;
-//   myproc()->trace = n;
-//   return 0;
-// }
+uint64
+sys_strace(void)
+{
+  int n;
+  argint(0, &n);
+  myproc()->trace = n;
+  return 0;
+}
