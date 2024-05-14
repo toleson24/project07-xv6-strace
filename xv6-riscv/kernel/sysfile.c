@@ -78,7 +78,7 @@ sys_read(void)
 
   r = argfd(0, &fd, &f);
   
-  if (mp->trace0
+  if (mp->trace)
     printf("[%d] read(%d, %p, %d)\n", mp->pid, fd, p, n);
 
   if (r > 0)
