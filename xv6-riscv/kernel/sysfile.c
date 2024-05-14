@@ -71,7 +71,9 @@ sys_read(void)
   struct file *f;
   int n;
   int fd;
+  int r;
   uint64 p;
+  struct proc *mp = myproc();
 
   argaddr(1, &p);
   argint(2, &n);
@@ -81,7 +83,7 @@ sys_read(void)
   if (mp->trace)
     printf("[%d] read(%d, %p, %d)\n", mp->pid, fd, p, n);
 
-  if (r > 0)
+  if (r < 0)
     return -1;
 
   return fileread(f, p, n);
