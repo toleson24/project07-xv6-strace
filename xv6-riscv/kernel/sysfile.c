@@ -168,8 +168,15 @@ sys_link(void)  // TODO add tracing
   char name[DIRSIZ], new[MAXPATH], old[MAXPATH];
   struct inode *dp, *ip;
   struct proc *mp = myproc();
+  int r0, r1;
 
-  if(argstr(0, old, MAXPATH) < 0 || argstr(1, new, MAXPATH) < 0)
+  r0 = argstr(0, old, MAXPATH);
+  r1 = argstr(1, new, MAXPATH);
+
+  if(mp->trace)
+    printf("[%d] link(%s, %s)\n", mp->pid, old, new);
+
+  if(r0 < 0 || r1 < 0)
     return -1;
 
   begin_op();
@@ -200,9 +207,6 @@ sys_link(void)  // TODO add tracing
   iput(ip);
 
   end_op();
-
-  if(mp->trace)
-    printf("[%d] link(%s, %s)\n", mp->pid, new, old);
 
   return 0;
 
