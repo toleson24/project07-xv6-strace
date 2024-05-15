@@ -59,7 +59,7 @@ sys_sbrk(void)
   if(growproc(n) < 0)
     return -1;
   if(mp->trace)
-    printf("[%d] sbrk(%d) %d", mp->pid, n, addr);
+    printf("[%d] sbrk(%d) %d\n", mp->pid, n, addr);
   return addr;
 }
 
