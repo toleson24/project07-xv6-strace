@@ -475,13 +475,17 @@ sys_chdir(void)
 {
   char path[MAXPATH];
   struct inode *ip;
+  int r;
   struct proc *p = myproc();
-
-  if(p->trace)
-    printf("[%d] chdir(%p)\n", p->pid, path);
   
   begin_op();
-  if(argstr(0, path, MAXPATH) < 0 || (ip = namei(path)) == 0){
+  r = argstr(0, path, MAXPATH);
+  ip = namei(path);
+
+  if(p->trace)
+    printf("[%d] chdir(%s)\n", p->pid, path);
+
+  if(r < 0 || ip == 0){
     end_op();
     return -1;
   }
@@ -495,6 +499,7 @@ sys_chdir(void)
   iput(p->cwd);
   end_op();
   p->cwd = ip;
+
   return 0;
 }
 
