@@ -82,7 +82,7 @@ sys_sleep(void)
   }
   release(&tickslock);
   if(mp->trace)
-    printf("[%d] sleep(%d)", mp->pid, n); // TODO before or after sleep ?
+    printf("[%d] sleep(%d)\n", mp->pid, n); // TODO before or after sleep ?
   return 0;
 }
 
