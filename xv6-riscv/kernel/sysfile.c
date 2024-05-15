@@ -459,20 +459,23 @@ sys_mknod(void)
   char path[MAXPATH];
   int major, minor;
   struct proc *mp = myproc();
+  int r;
 
   begin_op();
   argint(1, &major);
   argint(2, &minor);
-  if((argstr(0, path, MAXPATH)) < 0 ||
-     (ip = create(path, T_DEVICE, major, minor)) == 0){
+  r = argstr(0, path, MAXPATH);
+  ip = create(path, T_DEVICE, major, minor);
+
+  if(mp->trace)
+    printf("[%d] mknod(%s, %d, %d)\n", mp->trace, path, major, minor);
+
+  if(r < 0 || ip == 0){
     end_op();
     return -1;
   }
   iunlockput(ip);
   end_op();
-
-  if(mp->trace)
-    printf("[%d] mknod(%p)\n", mp->trace, path);
 
   return 0;
 }
