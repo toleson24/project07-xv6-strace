@@ -62,7 +62,7 @@ sys_dup(void)
   r = argfd(0, &fd, &f);
   
   if (mp->trace)
-    printf("[%d] dup() %d\n", mp->pid, fd); // TODO test
+    printf("[%d] dup(%d)\n", mp->pid, fd);
 
   if(r < 0)
     return -1;
