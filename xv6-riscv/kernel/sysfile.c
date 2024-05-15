@@ -154,7 +154,7 @@ sys_fstat(void)
   argaddr(1, &st);
   
   if (mp->trace)
-    printf("[%d] close(%d)\n", mp->pid, fd);
+    printf("[%d] fstat(%d)\n", mp->pid, fd);
 
   if(r < 0)
     return -1;
