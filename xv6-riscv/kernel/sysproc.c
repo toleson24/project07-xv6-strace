@@ -52,11 +52,14 @@ sys_sbrk(void)
 {
   uint64 addr;
   int n;
+  struct proc *mp = myproc();
 
   argint(0, &n);
   addr = myproc()->sz;
   if(growproc(n) < 0)
     return -1;
+  if(mp->trace)
+    printf("[%d] sbrk(%d) %d", mp->pid, n, addr);
   return addr;
 }
 
@@ -65,6 +68,7 @@ sys_sleep(void)
 {
   int n;
   uint ticks0;
+  struct proc *mp = myproc();
 
   argint(0, &n);
   acquire(&tickslock);
@@ -77,6 +81,8 @@ sys_sleep(void)
     sleep(&ticks, &tickslock);
   }
   release(&tickslock);
+  if(mp->trace)
+    printf("[%d] sleep(%d)", mp->pid, n); // TODO before or after sleep ?
   return 0;
 }
 
@@ -84,8 +90,11 @@ uint64
 sys_kill(void)
 {
   int pid;
+  struct proc *mp = myproc();
 
   argint(0, &pid);
+  if(mp->trace)
+    printf("[%d] kill()\n", mp->pid);
   return kill(pid);
 }
 
@@ -95,10 +104,13 @@ uint64
 sys_uptime(void)
 {
   uint xticks;
+  struct proc *mp = myproc();
 
   acquire(&tickslock);
   xticks = ticks;
   release(&tickslock);
+  if(mp->trace)
+    printf("[%d] uptime()\n", mp->pid);
   return xticks;
 }
 
@@ -107,6 +119,8 @@ sys_strace(void)
 {
   int n;
   argint(0, &n);
-  myproc()->trace = n;
+  if (n < 0)
+    return -1;
+  myproc()->trace = 1;
   return 0;
 }
