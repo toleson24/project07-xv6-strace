@@ -125,8 +125,15 @@ sys_close(void)
 {
   int fd;
   struct file *f;
+  int r;
+  struct proc *mp = myproc();
 
-  if(argfd(0, &fd, &f) < 0)
+  r = argfd(0, &fd, &f);
+  
+  if (mp->trace)
+    printf("[%d] close(%d)\n", mp->pid, fd);
+
+  if(r < 0)
     return -1;
   myproc()->ofile[fd] = 0;
   fileclose(f);
@@ -138,16 +145,25 @@ sys_fstat(void)
 {
   struct file *f;
   uint64 st; // user pointer to struct stat
+  int fd;
+  int r;
+  struct proc *mp = myproc();
+
+  r = argfd(0, &fd, &f);
 
   argaddr(1, &st);
-  if(argfd(0, 0, &f) < 0)
+  
+  if (mp->trace)
+    printf("[%d] close(%d)\n", mp->pid, fd);
+
+  if(r < 0)
     return -1;
   return filestat(f, st);
 }
 
 // Create the path new as a link to the same inode as old.
 uint64
-sys_link(void)
+sys_link(void)  // TODO add tracing
 {
   char name[DIRSIZ], new[MAXPATH], old[MAXPATH];
   struct inode *dp, *ip;
@@ -212,7 +228,7 @@ isdirempty(struct inode *dp)
 }
 
 uint64
-sys_unlink(void)
+sys_unlink(void)  // TODO add tracing
 {
   struct inode *ip, *dp;
   struct dirent de;
@@ -328,7 +344,7 @@ create(char *path, short type, short major, short minor)
 }
 
 uint64
-sys_open(void)
+sys_open(void)  // TODO add tracing
 {
   char path[MAXPATH];
   int fd, omode;
@@ -401,6 +417,7 @@ sys_mkdir(void)
 {
   char path[MAXPATH];
   struct inode *ip;
+  struct proc *mp = myproc();
 
   begin_op();
   if(argstr(0, path, MAXPATH) < 0 || (ip = create(path, T_DIR, 0, 0)) == 0){
@@ -409,6 +426,10 @@ sys_mkdir(void)
   }
   iunlockput(ip);
   end_op();
+
+  if(mp->trace)
+    printf("[%d] mkdir(%p)\n", mp->pid, path);
+
   return 0;
 }
 
@@ -418,6 +439,7 @@ sys_mknod(void)
   struct inode *ip;
   char path[MAXPATH];
   int major, minor;
+  struct proc *mp = myproc();
 
   begin_op();
   argint(1, &major);
@@ -429,6 +451,10 @@ sys_mknod(void)
   }
   iunlockput(ip);
   end_op();
+
+  if(mp->trace)
+    printf("[%d] mknod(%p)\n", mp->trace, path);
+
   return 0;
 }
 
@@ -438,6 +464,9 @@ sys_chdir(void)
   char path[MAXPATH];
   struct inode *ip;
   struct proc *p = myproc();
+
+  if(p->trace)
+    printf("[%d] chdir(%p)\n", p->pid, path);
   
   begin_op();
   if(argstr(0, path, MAXPATH) < 0 || (ip = namei(path)) == 0){
@@ -463,6 +492,7 @@ sys_exec(void)
   char path[MAXPATH], *argv[MAXARG];
   int i;
   uint64 uargv, uarg;
+  struct proc *mp = myproc();
 
   argaddr(1, &uargv);
   if(argstr(0, path, MAXPATH) < 0) {
@@ -487,6 +517,9 @@ sys_exec(void)
       goto bad;
   }
 
+  if(mp->trace)
+    printf("[%d] exec(%p)\n", mp->pid, path); // TODO before for loop?
+
   int ret = exec(path, argv);
 
   for(i = 0; i < NELEM(argv) && argv[i] != 0; i++)
@@ -509,6 +542,10 @@ sys_pipe(void)
   struct proc *p = myproc();
 
   argaddr(0, &fdarray);
+
+  if(p->trace)
+    printf("[%d] pipe(%d)\n", p->pid, fd0);
+
   if(pipealloc(&rf, &wf) < 0)
     return -1;
   fd0 = -1;
