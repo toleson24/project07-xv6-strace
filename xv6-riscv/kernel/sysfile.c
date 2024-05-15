@@ -434,18 +434,21 @@ sys_mkdir(void)
   char path[MAXPATH];
   struct inode *ip;
   struct proc *mp = myproc();
+  int r;
 
   begin_op();
-  if(argstr(0, path, MAXPATH) < 0 || (ip = create(path, T_DIR, 0, 0)) == 0){
+  r = argstr(0, path, MAXPATH);
+  ip = create(path, T_DIR, 0, 0);
+
+  if(mp->trace)
+    printf("[%d] mkdir(%s)\n", mp->trace, path);
+
+  if(r < 0 || ip == 0){
     end_op();
     return -1;
   }
   iunlockput(ip);
   end_op();
-
-  if(mp->trace)
-    printf("[%d] mkdir(%p)\n", mp->pid, path);
-
   return 0;
 }
 
