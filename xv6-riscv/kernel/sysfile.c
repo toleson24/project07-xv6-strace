@@ -351,6 +351,7 @@ sys_open(void)  // TODO add tracing
   struct file *f;
   struct inode *ip;
   int n;
+  struct proc *mp = myproc();
 
   argint(1, &omode);
   if((n = argstr(0, path, MAXPATH)) < 0)
@@ -408,6 +409,9 @@ sys_open(void)  // TODO add tracing
 
   iunlock(ip);
   end_op();
+
+  if(mp->trace)
+    printf("[%d] open(%s, %d)\n", mp->pid, path, fd);
 
   return fd;
 }
