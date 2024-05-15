@@ -56,8 +56,15 @@ sys_dup(void)
 {
   struct file *f;
   int fd;
+  int r;
+  struct proc *mp = myproc();
 
-  if(argfd(0, 0, &f) < 0)
+  r = argfd(0, &fd, &f);
+  
+  if (mp->trace)
+    printf("[%d] dup() %d\n", mp->pid, fd); // TODO test
+
+  if(r < 0)
     return -1;
   if((fd=fdalloc(f)) < 0)
     return -1;
@@ -94,11 +101,20 @@ sys_write(void)
 {
   struct file *f;
   int n;
+  int fd;
+  int r;
   uint64 p;
-  
+  struct proc *mp = myproc();
+
   argaddr(1, &p);
   argint(2, &n);
-  if(argfd(0, 0, &f) < 0)
+  
+  r = argfd(0, &fd, &f);
+  
+  if (mp->trace)
+    printf("[%d] write(%d, %p, %d)\n", mp->pid, fd, p, n);
+
+  if(r < 0)
     return -1;
 
   return filewrite(f, p, n);
