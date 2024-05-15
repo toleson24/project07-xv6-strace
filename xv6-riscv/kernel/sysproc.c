@@ -43,7 +43,7 @@ sys_wait(void)
   argaddr(0, &p);
   struct proc *mp = myproc();
   if(mp->trace)
-    printf("[%d] wait(%d)\n", mp->pid, p);
+    printf("[%d] wait(%p)\n", mp->pid, p);
   return wait(p);
 }
 
