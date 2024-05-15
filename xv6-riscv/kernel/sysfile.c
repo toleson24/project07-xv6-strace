@@ -571,7 +571,7 @@ sys_pipe(void)
   argaddr(0, &fdarray);
 
   if(p->trace)
-    printf("[%d] pipe(%p)\n", p->pid, fd0);
+    printf("[%d] pipe(%p)\n", p->pid, fdarray);
 
   if(pipealloc(&rf, &wf) < 0)
     return -1;
