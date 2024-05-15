@@ -167,6 +167,7 @@ sys_link(void)  // TODO add tracing
 {
   char name[DIRSIZ], new[MAXPATH], old[MAXPATH];
   struct inode *dp, *ip;
+  struct proc *mp = myproc();
 
   if(argstr(0, old, MAXPATH) < 0 || argstr(1, new, MAXPATH) < 0)
     return -1;
@@ -199,6 +200,9 @@ sys_link(void)  // TODO add tracing
   iput(ip);
 
   end_op();
+
+  if(mp->trace)
+    printf("[%d] link(%s, %s)\n", mp->pid, new, old);
 
   return 0;
 
@@ -234,6 +238,7 @@ sys_unlink(void)  // TODO add tracing
   struct dirent de;
   char name[DIRSIZ], path[MAXPATH];
   uint off;
+  struct proc *mp = myproc();
 
   if(argstr(0, path, MAXPATH) < 0)
     return -1;
@@ -275,6 +280,9 @@ sys_unlink(void)  // TODO add tracing
   iunlockput(ip);
 
   end_op();
+
+  if(mp->trace)
+    printf("[%d] unlink(%s)\n", mp->pid, path);
 
   return 0;
 
