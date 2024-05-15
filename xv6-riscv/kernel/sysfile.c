@@ -522,7 +522,7 @@ sys_exec(void)
   }
 
   if(mp->trace)
-    printf("[%d] exec(%p)\n", mp->pid, path); // TODO before for loop?
+    printf("[%d] exec(%s, %p)\n", mp->pid, argv[0], path);
 
   int ret = exec(path, argv);
 
@@ -548,7 +548,7 @@ sys_pipe(void)
   argaddr(0, &fdarray);
 
   if(p->trace)
-    printf("[%d] pipe(%d)\n", p->pid, fd0);
+    printf("[%d] pipe(%p)\n", p->pid, fd0);
 
   if(pipealloc(&rf, &wf) < 0)
     return -1;
