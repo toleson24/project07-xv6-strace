@@ -94,7 +94,7 @@ sys_kill(void)
 
   argint(0, &pid);
   if(mp->trace)
-    printf("[%d] kill()\n", mp->pid);
+    printf("[%d] kill(%d)\n", mp->pid, pid);
   return kill(pid);
 }
 
