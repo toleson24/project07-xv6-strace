@@ -121,6 +121,6 @@ sys_strace(void)
   argint(0, &n);
   if (n < 0)
     return -1;
-  myproc()->trace = 1;
+  myproc()->trace = n;
   return 0;
 }
