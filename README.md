@@ -29,7 +29,7 @@ xv6 Homepage: https://pdos.csail.mit.edu/6.828/2023/xv6.html
 MIT Instructions for installation: https://pdos.csail.mit.edu/6.828/2023/tools.html  
 > Note: This guide contains instruction for both macOS and Ubuntu/Ubuntu in Windows WSL.
 
-RISC-V xv6 GitHup repo: https://github.com/mit-pdos/xv6-riscv
+RISC-V xv6 GitHub repo: https://github.com/mit-pdos/xv6-riscv
 
 ## Requirements
 
@@ -77,7 +77,7 @@ Compare this to the original code and notice the added rv variable and order of 
 
 ### User Programs
 
-See `xv6-riscv/user/sctrace.c` for the `strace` user program. An example output for `strace echo` with a string follows:
+See `xv6-riscv/user/sctrace.c` for the `strace` user program. Here is an example output for `strace echo`
 
 ```bash
 $ strace echo a b c
@@ -98,20 +98,20 @@ See `xv6-riscv/user/sctest.c` for the comprehensive system call-testing user pro
 
 ### Manual
 
-To test the implmentation of strace, first run the kernel:
+To test the implmentation of strace, first run the kernel
 
 ```bash
 cd xv6-riscv
 make qemu
 ```
 
-Then run the test:
+then run the test
 
 ```bash
 strace sctest
 ```
 
-To exit QEMU, press `CRTL + A` then `X`.
+To exit QEMU, press `CRTL + A` then `X`.  
 
-> Note: Unit tests and their sample expected outputs do not exist.
-> Note: There are no Autograder tests for this project.
+> Note: Unit tests and their sample expected outputs do not exist.  
+> Note: There are no Autograder tests for this project.  
